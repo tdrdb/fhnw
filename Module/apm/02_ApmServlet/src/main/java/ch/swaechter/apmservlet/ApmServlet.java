@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
 
 @WebServlet("/")
 public class ApmServlet extends HttpServlet {
@@ -46,19 +45,13 @@ public class ApmServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Map parameters = request.getParameterMap();
-        Integer idParameter = getIdFromRequest(request, "idvalue");
+        Integer idParameter = getIdFromRequest(request, "newid");
         String textParameter = getTextFromRequest(request);
 
         // Check the ID
         if (idParameter != null) {
-            // Get or save submit
-            if (parameters.containsKey("getsubmit")) {
-                response.sendRedirect("/?id=" + idParameter);
-            } else if (parameters.containsKey("savesubmit") && textParameter != null) {
-                storage.store(idParameter, textParameter);
-                response.sendRedirect("/?id=" + idParameter);
-            }
+            storage.store(idParameter, textParameter);
+            response.sendRedirect("/?id=" + idParameter);
         } else {
             response.sendRedirect("/");
         }
